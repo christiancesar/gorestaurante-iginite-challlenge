@@ -1,20 +1,12 @@
-import { useCallback, useState } from 'react';
-import Header from '../../components/Header';
-import api from '../../services/api';
+import { useCallback, useEffect, useState } from 'react';
 import Food from '../../components/Food';
+import Header from '../../components/Header';
 import ModalAddFood from '../../components/ModalAddFood';
 import ModalEditFood from '../../components/ModalEditFood';
+import api from '../../services/api';
+import { FoodProps } from '../../types/FoodProps';
 import { FoodsContainer } from './styles';
-import { useEffect } from 'react';
 
-interface FoodProps {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  available: boolean;
-  image: string;
-}
 
 function Dashboard() {
   const [foods, setFoods] = useState<FoodProps[]>([]);
@@ -26,7 +18,7 @@ function Dashboard() {
     api.get('/foods').then(response => setFoods(response.data));
   }, [])
 
-  const handleAddFood = useCallback(async (food) => {
+  const handleAddFood = useCallback(async (food: FoodProps) => {
 
     try {
       const response = await api.post('/foods', {
@@ -38,9 +30,9 @@ function Dashboard() {
     } catch (err) {
       console.log(err);
     }
-  }, []);
+  }, [foods]);
 
-  const handleUpdateFood = useCallback(async (food) => {
+  const handleUpdateFood = useCallback(async (food: FoodProps) => {
 
     try {
       const foodUpdated = await api.put(
@@ -58,7 +50,7 @@ function Dashboard() {
     }
   }, [editingFood, foods]);
 
-  const handleDeleteFood = useCallback(async (id) => {
+  const handleDeleteFood = useCallback(async (id: number) => {
 
     await api.delete(`/foods/${id}`);
 
@@ -75,7 +67,7 @@ function Dashboard() {
     setEditModalOpen(!editModalOpen);
   }
 
-  const handleEditFood = useCallback((food) => {
+  const handleEditFood = useCallback((food: FoodProps) => {
     setEditingFood(food);
     setModalOpen(true)
   }, []);
@@ -97,7 +89,7 @@ function Dashboard() {
 
       <FoodsContainer data-testid="foods-list">
         {foods &&
-          foods.map(food => (
+          foods.map((food: FoodProps) => (
             <Food
               key={food.id}
               food={food}
