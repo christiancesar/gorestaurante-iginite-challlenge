@@ -69,7 +69,7 @@ function Dashboard() {
 
   const handleEditFood = useCallback((food: FoodProps) => {
     setEditingFood(food);
-    setModalOpen(true)
+    setEditModalOpen(true)
   }, []);
 
   return (
